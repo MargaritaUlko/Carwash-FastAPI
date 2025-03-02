@@ -48,10 +48,10 @@ def register_static_docs_routes(app: FastAPI):
             redoc_js_url="https://unpkg.com/redoc@next/bundles/redoc.standalone.js",
         )
 
-    @app.get("/test")
-    async def test_time():
-        utc_now = datetime.now(pytz.utc)
-        return {"utc_time": utc_now, "krasnoyarsk_time": utc_now.astimezone(krasnoyarsk_tz)}
+    # @app.get("/test")
+    # async def test_time():
+    #     utc_now = datetime.now(pytz.utc)
+    #     return {"utc_time": utc_now, "krasnoyarsk_time": utc_now.astimezone(krasnoyarsk_tz)}
 
 
 
