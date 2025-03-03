@@ -65,7 +65,7 @@ async def get_customer_car(
 
 
 # Создание нового автомобиля клиента
-@customer_car_router.post("", response_model=CustomerCarBase, status_code=status.HTTP_201_CREATED)
+@customer_car_router.post("", response_model=CustomerCarRead, status_code=status.HTTP_201_CREATED)
 async def create_customer_car(
     customer_car_create: CustomerCarCreate,
     session: AsyncSession = Depends(db_helper.session_getter),

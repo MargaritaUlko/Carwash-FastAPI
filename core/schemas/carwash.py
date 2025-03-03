@@ -245,6 +245,7 @@ class CustomerCarRead(BaseModel):
     class Config:
         orm_mode = True
 
+
 class CustomerCarUpdate(BaseModel):
     customer_id: int
     year: int

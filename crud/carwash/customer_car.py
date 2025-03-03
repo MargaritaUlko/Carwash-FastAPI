@@ -15,8 +15,18 @@ async def create_customer_car(session: AsyncSession, customer_car_create: Custom
     session.add(customer_car)
     await session.commit()
     await session.refresh(customer_car)
-    return customer_car
 
+    # Подгрузка связанных объектов car и customer
+    result = await session.execute(
+        select(Customer_Car)
+        .options(
+            joinedload(Customer_Car.car).joinedload(Car.brand),  # Подгрузка car с brand
+            joinedload(Customer_Car.customer)  # Подгрузка customer
+        )
+        .where(Customer_Car.id == customer_car.id)
+    )
+    customer_car_with_details = result.scalars().first()
+    return customer_car_with_details
 # async def get_customer_car(session: AsyncSession, customer_car_id: int) -> Customer_Car:
 #     stmt = select(Customer_Car).filter(Customer_Car.id == customer_car_id)
 #     result = await session.execute(stmt)

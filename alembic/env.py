@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
 from core.config import settings
-from core.models import tasks, Base  # Base обязательно должно быть вашим declarative_base()
+from core.models import Base  # Base обязательно должно быть вашим declarative_base()
 
 DATABASE_URL="postgresql+asyncpg://postgres:123@pg:5432/app_db"
 
