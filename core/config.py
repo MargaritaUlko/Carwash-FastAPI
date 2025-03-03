@@ -85,7 +85,6 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
     access_token: AccessToken
-    email_host: int
     from_email: str
     to_email: str
     smtp_password: str

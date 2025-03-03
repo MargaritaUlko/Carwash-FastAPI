@@ -5,13 +5,12 @@ from email.mime.text import MIMEText
 from dotenv import load_dotenv
 import os
 # send_email.py
-# load_dotenv()
+load_dotenv()
 
-# smtp_password = os.getenv("APP_CONFIG__SMTP_PASSWORD")
 
 def send_email(to_email, subject, body):
     smtp_server = "smtp.gmail.com"
-    smtp_port = 587
+    smtp_port = 587 
     from_email = os.getenv("FROM_EMAIL")
     from_password = os.getenv("SMTP_PASSWORD")
     to_email = os.getenv("TO_EMAIL")
