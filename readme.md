@@ -5,8 +5,8 @@ Carwash FastAPI — API для управления заказами и услу
 Важно сразу заполнить поля FROM_EMAIL, TO_EMAIL, SMTP_PASSWORD в env.py, эти характеристки отвечают за отправку сообщений на почту через SMTP клиент.  
 По команде docker-compose up --build поднимаются все контейнеры приложения.
 Для отправки сообщений через celery требуется запустить worker и beat:
-celery -A core.email_sending.celery_app worker --loglevel=info --pool=solo
-celery -A core.email_sending.celery_app beat --loglevel=info
+# celery -A core.email_sending.celery_app worker --loglevel=info --pool=solo
+# celery -A core.email_sending.celery_app beat --loglevel=info
 
 *Структура Базы Данных*
 Для построения базы данных был использован следующий дизайн:
