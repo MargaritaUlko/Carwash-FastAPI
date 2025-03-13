@@ -34,7 +34,6 @@ async def api_get_order_services(
         order=order
     )
 
-    # Пагинация
     offset = (page - 1) * limit
     order_services_paginated = order_services[offset:offset + limit]
 
@@ -48,37 +47,15 @@ async def api_get_order_services(
 async def get_order_service(
     order_service_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
-    orders: list[OrderService] = Depends(check_order_list_access22()),  # Проверяем доступные заказы пользователя
+    orders: list[OrderService] = Depends(check_order_list_access22()),  
 ):
-    # Ищем заказ среди доступных для пользователя
     order_service = next((service for service in orders if service.id == order_service_id), None)
 
-    # Если заказ не найден, выбрасываем ошибку 404
+
     if not order_service:
         raise HTTPException(status_code=404, detail="OrderService not found")
 
     return order_service
-
-
-# Создание нового заказа с сервисом
-# @order_service_router.post("", response_model=OrderServiceCreate, status_code=status.HTTP_201_CREATED)
-# async def create_order_service(
-#     order_service_create: OrderServiceCreate,
-#     session: AsyncSession = Depends(db_helper.session_getter),
-#     user: User = Depends(check_access([1]))
-# ):
-#     try:
-#         order_service = await order_service_crud.create_order_service(
-#             session=session,
-#             order_service_create=order_service_create
-#         )
-#         return order_service
-#     except ValueError as ve:
-#         raise HTTPException(status_code=400, detail=str(ve))  # Логическая ошибка
-#     except Exception as e:
-#         # Логирование ошибки
-#         print(f"Unexpected error in create_order_service: {str(e)}")
-#         raise HTTPException(status_code=500, detail="Internal server error")
 
 
 @order_service_router.post("", status_code=status.HTTP_201_CREATED)

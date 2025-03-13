@@ -55,11 +55,9 @@ async def get_cars_api(
         if not hasattr(Car, sort_by):
             raise HTTPException(status_code=400, detail=f"Invalid sort_by value: {sort_by}")
 
-        # Сортируем данные для всей коллекции
         reverse = order == "desc"
         cars = sorted(cars, key=lambda car: getattr(car, sort_by), reverse=reverse)
 
-    # Пагинация
     offset = (page - 1) * limit
     cars_paginated = cars[offset:offset + limit]
 
