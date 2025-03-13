@@ -25,14 +25,13 @@ brand_router = APIRouter(
 @brand_router.get("", response_model=list[BrandRead])
 async def get_brands_api(
     session: AsyncSession = Depends(db_helper.session_getter),
-    limit: int = Query(10, ge=1),  # Ограничение количества элементов на странице
-    page: int = Query(1, ge=1),  # Номер страницы
-    name: Optional[str] = None,  # Фильтрация по имени бренда
-    sort_by: Optional[str] = Query("id", regex="^(id|name)$"),  # Поле для сортировки
-    order: Optional[str] = Query("asc", regex="^(asc|desc)$"),  # Направление сортировки
+    limit: int = Query(10, ge=1),  
+    page: int = Query(1, ge=1),  
+    name: Optional[str] = None,  
+    sort_by: Optional[str] = Query("id", regex="^(id|name)$"),  
+    order: Optional[str] = Query("asc", regex="^(asc|desc)$"), 
     user: User = Depends(check_access([1]))
 ):
-    # Получаем отфильтрованные бренды через функцию
     brands = await get_filtered_brands(
         session=session,
         name=name,
@@ -40,7 +39,6 @@ async def get_brands_api(
         order=order
     )
 
-    # Пагинация
     offset = (page - 1) * limit
     paginated_brands = brands[offset:offset + limit]
 

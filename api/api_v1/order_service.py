@@ -96,7 +96,6 @@ async def create_order_services(
     if errors:
         raise HTTPException(status_code=400, detail=errors)
 
-    # return {"data": [result["data"] for result in results if "data" in result]}
     return [result["data"] for result in results if "data" in result]
 
 @order_service_router.put("/{order_service_id}", response_model=OrderServiceRead)

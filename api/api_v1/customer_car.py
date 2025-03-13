@@ -21,13 +21,13 @@ customer_car_router = APIRouter(
 # Получение списка всех автомобилей клиентов
 @customer_car_router.get("", response_model=list[CustomerCarRead])
 async def api_get_customer_cars(
-    session: AsyncSession = Depends(db_helper.session_getter),  # Получаем сессию для работы с БД
-    limit: int = Query(10, ge=1),  # Параметр для ограничения количества элементов
-    page: int = Query(1, ge=1),  # Параметр для текущей страницы
-    sort_by: Optional[str] = Query("id", regex="^(id|car_model|customer_name)$"),  # Поле для сортировки
-    order: Optional[str] = Query("asc", regex="^(asc|desc)$"),  # Направление сортировки
-    car_model: Optional[str] = None,  # Новый параметр для фильтрации по модели машины
-    user: User = Depends(check_access([1]))  # Получаем текущего пользователя
+    session: AsyncSession = Depends(db_helper.session_getter),
+    limit: int = Query(10, ge=1), 
+    page: int = Query(1, ge=1), 
+    sort_by: Optional[str] = Query("id", regex="^(id|car_model|customer_name)$"), 
+    order: Optional[str] = Query("asc", regex="^(asc|desc)$"),  
+    car_model: Optional[str] = None,  
+    user: User = Depends(check_access([1]))  
 ):
 
     customer_cars = await get_customer_cars(
@@ -78,13 +78,13 @@ async def create_customer_car(
 # Обновление существующего автомобиля клиента
 @customer_car_router.put("/{customer_car_id}", response_model=CustomerCarUpdate)
 async def update_customer_car(
-    customer_car_update: CustomerCarUpdate,  # Параметр с телом запроса
+    customer_car_update: CustomerCarUpdate,  
     customer_car_id: int,
     session: AsyncSession = Depends(db_helper.session_getter),
     user: User = Depends(check_access([1]))
 ):
     customer_car = await customer_car_crud.update_customer_car(
-        session=session, customer_car_id=customer_car_id, customer_car_update=customer_car_update  # Передаем объект
+        session=session, customer_car_id=customer_car_id, customer_car_update=customer_car_update  
     )
     if not customer_car:
         raise HTTPException(status_code=404, detail="CustomerCar not found")

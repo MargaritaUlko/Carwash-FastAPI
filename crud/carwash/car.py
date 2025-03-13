@@ -10,17 +10,15 @@ from core.schemas.carwash import CarUpdate, CarCreate, CarRead
 # CRUD Operations for Car
 
 async def create_car(session: AsyncSession, car_create: CarCreate) -> Car:
-    # Создание новой записи
     car = Car(**car_create.dict())
     session.add(car)
     await session.commit()
     await session.refresh(car)
 
-    # Подгрузка связанного объекта brand
     result = await session.execute(
         select(Car)
-        .options(joinedload(Car.brand))  # Указываем подгрузку
-        .filter(Car.id == car.id)        # Фильтр по только что созданному ID
+        .options(joinedload(Car.brand)) 
+        .filter(Car.id == car.id)       
     )
     car_with_brand = result.scalars().first()
 

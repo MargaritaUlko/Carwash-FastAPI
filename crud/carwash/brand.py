@@ -28,16 +28,13 @@ async def get_filtered_brands(
     sort_by: Optional[str] = Query("id", regex="^(id|name)$"),
     order: Optional[str] = Query("asc", regex="^(asc|desc)$"),
 ) -> list[Brand]:
-    # Получаем все бренды из базы данных
     stmt = select(Brand)
     result = await session.execute(stmt)
     brands = result.scalars().all()
 
-    # Фильтрация по имени
     if name:
         brands = [brand for brand in brands if name.lower() in brand.name.lower()]
 
-    # Сортировка
     if sort_by:
         if not hasattr(Brand, sort_by):
             raise HTTPException(status_code=400, detail=f"Invalid sort_by value: {sort_by}")

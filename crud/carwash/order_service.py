@@ -28,12 +28,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-LOCAL_TIMEZONE = pytz.timezone("Asia/Krasnoyarsk")
-
-
-
-KRASNOYARSK_TZ = pytz.timezone("Asia/Krasnoyarsk")
-
 async def create_order_services(session: AsyncSession, order_service_create: OrderServiceCreate):
     # Шаг 1: Проверка заказа
     stmt_order = select(Order).filter(Order.id == order_service_create.order_id)
@@ -161,74 +155,3 @@ async def delete_order_service(session: AsyncSession, order_service_id: int) -> 
     await session.commit()
     return order_service
 
-# async def create_order_service(session: AsyncSession, order_service_create: OrderServiceCreate) -> OrderService:
-#     # Step 1: Extract order by order_id
-#     stmt_order = select(Order).filter(Order.id == order_service_create.order_id)
-#     result_order = await session.execute(stmt_order)
-#     order = result_order.scalars().first()
-#
-#     if not order:
-#         logger.error(f"Order with id {order_service_create.order_id} not found.")
-#         raise HTTPException(status_code=404, detail="Order not found")
-#
-#     # Step 2: Extract service by service_id
-#     stmt_service = select(Service).filter(Service.id == order_service_create.service_id)
-#     result_service = await session.execute(stmt_service)
-#     service = result_service.scalars().first()
-#
-#     if not service:
-#         logger.error(f"Service with id {order_service_create.service_id} not found.")
-#         raise HTTPException(status_code=404, detail="Service not found")
-#
-#     # Step 3: Check if the order is in progress (status != 0)
-#     if order.status == 0:
-#         # Check if the order already has services
-#         stmt_existing_order_service = select(OrderService).filter(OrderService.order_id == order_service_create.order_id)
-#         result_existing_order_service = await session.execute(stmt_existing_order_service)
-#         existing_order_service = result_existing_order_service.scalars().first()
-#
-#         if existing_order_service:
-#             logger.error(f"Cannot add service to order with status 0. Order ID: {order_service_create.order_id}")
-#             raise HTTPException(status_code=400, detail="Cannot add service to order with status 0")
-#         else:
-#             logger.info(f"Order with ID {order_service_create.order_id} has no services yet. Proceeding to add new service.")
-#
-#     # Step 4: Check if the service already exists in the order
-#     stmt_existing_service = select(OrderService).filter(
-#         OrderService.order_id == order_service_create.order_id,
-#         OrderService.service_id == order_service_create.service_id
-#     )
-#     result_existing_service = await session.execute(stmt_existing_service)
-#     existing_service = result_existing_service.scalars().first()
-#
-#     if existing_service:
-#         service_name = existing_service.service.name
-#         logger.error(f"Service '{service_name}' already exists in this order.")
-#         raise HTTPException(status_code=400, detail=f"This service '{service_name}' already exists in the order.")
-#
-#     # Step 5: Create the new OrderService
-#     order_service = OrderService(**order_service_create.dict())
-#     session.add(order_service)
-#
-#     # Step 6: Update the order's end_date based on the service's time
-#     if order.end_date:
-#         order.end_date += timedelta(seconds=service.time)
-#         logger.info(f"Order end_date updated to {order.end_date} after adding service.")
-#     else:
-#         order.end_date = order.start_date + timedelta(seconds=service.time)
-#         logger.info(f"Order end_date set to {order.end_date} after adding service.")
-#
-#     # Step 7: Commit the changes to the session
-#     session.add(order)
-#
-#     # Step 8: Perform the commit and refresh the order and order_service objects
-#     await session.commit()
-#
-#     # Refresh the objects after commit to get the latest data
-#     await session.refresh(order)
-#     await session.refresh(order_service)
-#
-#     logger.info(f"Order with ID {order_service_create.order_id} updated successfully.")
-#     logger.info(f"New order_service created with ID {order_service.id}.")
-#
-#     return order_service

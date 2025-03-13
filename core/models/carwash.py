@@ -64,6 +64,7 @@ class Service(Base):
             },
         }
 
+
     def convert_price(self, price):
         return price // 100  # Конвертация цены
 

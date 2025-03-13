@@ -22,13 +22,7 @@ car_router = APIRouter(
     tags=["Cars"],
 )
 
-# @car_router.get("", response_model=list[CarRead])
-# async def get_cars(
-#     session: AsyncSession = Depends(db_helper.session_getter),
-#     limit: int = 10,
-# ):
-#     cars = await car_crud.get_cars(session=session, limit=limit)
-#     return cars
+
 @car_router.get("/car/{car_id}", response_model=CarRead)
 async def get_car(
     car_id: int,
@@ -39,46 +33,14 @@ async def get_car(
     car = await car_crud.get_car(session=session, car_id=car_id)
     return car
 
-
-# Получение автомобиля по id
-
-# @car_router.get("", response_model=list[CarRead])
-# async def get_cars(
-#     session: AsyncSession = Depends(db_helper.session_getter),
-#     limit: int = Query(10, ge=1),  # Параметр для ограничения количества элементов
-#     page: int = Query(1, ge=1),  # Параметр для текущей страницы
-#     brand: Optional[str] = None,  # Фильтрация по бренду
-#     sort_by: Optional[str] = Query("id", regex="^(id|model)$"),  # Поле для сортировки
-#     order: Optional[str] = Query("asc", regex="^(asc|desc)$"),  # Направление сортировки
-# ):
-#     # Рассчитываем offset на основе страницы
-#     offset = (page - 1) * limit
-#
-#     # Базовый запрос
-#     stmt = select(Car).options(joinedload(Car.brand)).offset(offset).limit(limit)
-#
-#     # Фильтрация по бренду
-#     if brand:
-#         stmt = stmt.join(Brand).filter(Brand.name.ilike(f"%{brand}%"))  # Фильтр по имени бренда
-#
-#     # Сортировка
-#     if sort_by:
-#         column = getattr(Car, sort_by)
-#         stmt = stmt.order_by(column.asc() if order == "asc" else column.desc())
-#
-#     # Выполнение запроса
-#     result = await session.execute(stmt)
-#     cars = result.scalars().all()
-#
-#     return cars
 @car_router.get("", response_model=list[CarRead])
 async def get_cars_api(
-        session: AsyncSession = Depends(db_helper.session_getter),  # Получаем сессию для работы с БД
-        limit: int = Query(10, ge=1),  # Параметр для ограничения количества элементов
-        page: int = Query(1, ge=1),  # Параметр для текущей страницы
-        brand: Optional[str] = None,  # Фильтрация по бренду
-        sort_by: Optional[str] = Query("id", regex="^(id|model)$"),  # Поле для сортировки
-        order: Optional[str] = Query("asc", regex="^(asc|desc)$"),  # Направление сортировки
+        session: AsyncSession = Depends(db_helper.session_getter), 
+        limit: int = Query(10, ge=1),
+        page: int = Query(1, ge=1),  
+        brand: Optional[str] = None, 
+        sort_by: Optional[str] = Query("id", regex="^(id|model)$"),  
+        order: Optional[str] = Query("asc", regex="^(asc|desc)$"), 
         user:   User = Depends(check_access([1]))
 ):
 
